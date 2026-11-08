@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>בדיקת חיבור 2</title>
+<style>body{font-family:system-ui,Arial;background:#14161f;color:#f1ede2;padding:16px}pre{white-space:pre-wrap;background:#0e1018;padding:12px;border-radius:10px;direction:ltr;text-align:left;font-size:13px}</style>
+</head><body><h2>בדיקת חיבור 2</h2><pre id="o">running...</pre>
+<script>
+const U='https://fchfouruszelvpqayshi.supabase.co',K='sb_publishable_8qodeZkzBhLBdnmkculubQ_PA8pI8OB';
+const o=document.getElementById('o');let t='';const log=s=>{t+=s+'\n';o.textContent=t};
+const run=async(n,f)=>{try{log(n+' -> '+await f())}catch(e){log(n+' -> ERROR: '+e.message)}};
+(async()=>{
+ log('page: '+location.href);
+ await run('1 api.github.com (other site, CORS ok)',async()=>{const r=await fetch('https://api.github.com/zen');return 'HTTP '+r.status});
+ await run('2 supabase simple GET (no headers)',async()=>{const r=await fetch(U+'/rest/v1/profiles?select=id&apikey='+K);return 'HTTP '+r.status+' '+(await r.text()).slice(0,80)});
+ await run('3 supabase no-cors',async()=>{const r=await fetch(U+'/auth/v1/health',{mode:'no-cors'});return 'type='+r.type+' (reached the server)'});
+ await run('4 supabase with apikey header',async()=>{const r=await fetch(U+'/auth/v1/health',{headers:{apikey:K}});return 'HTTP '+r.status});
+ await run('5 image from supabase.co',()=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res('image loaded');i.onerror=()=>res('image request finished (error means reachable but not an image or blocked)');i.src=U+'/favicon.ico?'+Date.now()}));
+ log('done');
+})();
+</script></body></html>
