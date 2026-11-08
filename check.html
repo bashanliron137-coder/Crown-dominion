@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>בדיקת חיבור</title>
+<style>body{font-family:system-ui,Arial;background:#14161f;color:#f1ede2;padding:16px}pre{white-space:pre-wrap;background:#0e1018;padding:12px;border-radius:10px;direction:ltr;text-align:left;font-size:13px}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1"></script>
+</head><body>
+<h2>בדיקת חיבור לשרת</h2>
+<pre id="o">running...</pre>
+<script>
+const URL_='https://fchfouruszelvpqayshi.supabase.co',KEY='sb_publishable_8qodeZkzBhLBdnmkculubQ_PA8pI8OB';
+const o=document.getElementById('o');let t='';const log=s=>{t+=s+'\n';o.textContent=t};
+(async()=>{
+ log('page: '+location.href);log('online: '+navigator.onLine);log('supabase lib: '+(window.supabase?'loaded':'NOT LOADED'));
+ const tryf=async(name,url)=>{try{const r=await fetch(url,{headers:{apikey:KEY}});let b=await r.text();log(name+' -> HTTP '+r.status+' '+b.slice(0,220))}catch(e){log(name+' -> FETCH ERROR: '+e.message)}};
+ await tryf('A health',URL_+'/auth/v1/health');
+ await tryf('B settings',URL_+'/auth/v1/settings');
+ await tryf('C profiles',URL_+'/rest/v1/profiles?select=id');
+ if(window.supabase){try{const sb=window.supabase.createClient(URL_,KEY);
+  const r=await sb.auth.signInWithPassword({email:'nobody.crowndominion@gmail.com',password:'123456'});
+  log('D login test -> '+(r.error?('error: '+r.error.message+' (status '+r.error.status+')'):'ok'))}catch(e){log('D login test -> EXCEPTION: '+e.message)}}
+ log('done');
+})();
+</script></body></html>
